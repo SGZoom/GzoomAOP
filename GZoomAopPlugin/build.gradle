@@ -1,0 +1,24 @@
+apply plugin: 'maven-publish'
+apply plugin: 'groovy'
+dependencies {
+    //gradle sdk
+    implementation gradleApi()
+    //groovy sdk
+    implementation localGroovy()
+    compileOnly 'com.android.tools.build:gradle:3.0.0'
+}
+publishing{
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            version = project.PROJECT_VERSION
+            artifactId = project.PROJECT_ARTIFACTID
+            groupId = project.PROJECT_GROUP
+        }
+    }
+    repositories{
+        maven {
+            url "../repo"
+        }
+    }
+}
