@@ -7,4 +7,5 @@ package com.gzoom.aopplugin;
  * @date 2020-06-20 16:21
  */
 public class GZoomAopExtension {
+
 }

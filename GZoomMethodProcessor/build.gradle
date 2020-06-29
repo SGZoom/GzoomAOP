@@ -1,0 +1,11 @@
+apply plugin: 'java'
+//apply plugin: 'com.android.application'
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //谷歌提供的Java 生成源代码库
+    implementation 'com.google.auto.service:auto-service:1.0-rc2'
+    compileOnly project(path: ':commonlibrary')
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"

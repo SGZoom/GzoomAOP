@@ -1,2 +1,5 @@
 include ':app', ':GZoomAopPlugin'
-rootProject.name='GzoomAOP'
+include ':commonlibrary'
+project(':commonlibrary').projectDir = new File('commonlibrary')
+include ':GZoomMethodProcessor'
+//rootProject.name='GzoomAOP'

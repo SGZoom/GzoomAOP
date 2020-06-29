@@ -36,7 +36,6 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.println;
 import static org.objectweb.asm.ClassReader.EXPAND_FRAMES;
 
 /**
@@ -76,11 +75,11 @@ public class GZoomTransformation extends Transform {
                 System.out.println("gzoom - start prepare:" + directoryInput.getName());
                 handleDirectories(outputProvider, directoryInput, isIncremental);
             }
-            Collection<JarInput> jars = input.getJarInputs();
-            for (JarInput jarInput : jars) {
-                System.out.println("gzoom - start prepare:" + jarInput.getName());
-                handleJarInputs(outputProvider, jarInput, isIncremental);
-            }
+//            Collection<JarInput> jars = input.getJarInputs();
+//            for (JarInput jarInput : jars) {
+//                System.out.println("gzoom - start prepare:" + jarInput.getName());
+//                handleJarInputs(outputProvider, jarInput, isIncremental);
+//            }
         }
     }
 

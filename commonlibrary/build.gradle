@@ -1,0 +1,15 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.groupId = project.COMMON_LIBRARY_PROJECT_GROUP
+            pom.artifactId = project.COMMON_LIBRARY_PROJECT_ARTIFACTID
+            pom.version = project.COMMON_LIBRARY_VERSION
+            pom.packaging = 'jar'
+            repository(url: uri("../repo"))
+        }
+    }
+}
