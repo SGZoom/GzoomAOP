@@ -1,5 +1,4 @@
 apply plugin: 'java'
-//apply plugin: 'com.android.application'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //谷歌提供的Java 生成源代码库
