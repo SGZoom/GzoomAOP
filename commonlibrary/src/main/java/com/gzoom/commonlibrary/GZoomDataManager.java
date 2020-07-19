@@ -37,6 +37,7 @@ public class GZoomDataManager {
     public void addMethodInfo(GZoomMethodInfo methodInfo) {
         if (methodInfo != null) {
             mMethodInfos.add(methodInfo);
+            System.out.println("addMethodInfo - " + methodInfo);
         }
     }
 

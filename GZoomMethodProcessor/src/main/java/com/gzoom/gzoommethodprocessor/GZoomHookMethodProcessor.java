@@ -16,6 +16,7 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -45,8 +46,14 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
     }
 
     @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latestSupported();
+    }
+
+    @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
 //        mAnnotatedClassMap.clear();
+        System.out.println("start GZoomHookMethodProcessor");
         try {
             processGZoomMethod(roundEnvironment);
         } catch (Exception e) {
@@ -69,11 +76,11 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
             String methodName = executableElement.getSimpleName().toString();
             // 描述符
             String methodDesc = "";
-            List<VariableElement> list = (List<VariableElement>) executableElement.getParameters();
-            for (VariableElement variableElement : list) {
-                methodDesc += variableElement.getSimpleName().toString() + ";";
-            }
-            methodDesc = "(" + methodDesc + ")";
+//            List<VariableElement> list = (List<VariableElement>) executableElement.getParameters();
+//            for (VariableElement variableElement : list) {
+//                methodDesc += variableElement.getSimpleName().toString() + ";";
+//            }
+//            methodDesc = "(" + methodDesc + ")";
             // 最后要加一个返回类型
             methodDesc += executableElement.getReturnType().toString();
             GZoomMethodInfo methodInfo = new GZoomMethodInfo(className, methodName, methodDesc);
@@ -104,4 +111,5 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
         types.add(GZoomMethod.class.getCanonicalName());
         return types;
     }
+
 }
