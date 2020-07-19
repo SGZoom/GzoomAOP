@@ -1,5 +1,7 @@
 package com.gzoom.commonlibrary;
 
+import javax.swing.plaf.TextUI;
+
 /**
  * Copyright (c) 2020 GongZaiChang. All rights reserved.
  *
@@ -18,5 +20,31 @@ public class GZoomMethodInfo {
         mMethodDesc = methodDesc;
 
         System.out.println("开始处理:mClassName=" + mClassName + ",mMethodName=" + mMethodName + ",mMethodDesc=" + mMethodDesc);
+    }
+
+
+    public String getTargetClassName() {
+        return mClassName;
+    }
+
+    public String getTargetMethodDesc() {
+        return mMethodDesc;
+    }
+
+    public String getTargetMethodName() {
+        return mMethodName;
+    }
+
+    @Override
+    public String toString() {
+        return getSplitClassName() + "." + mMethodName;
+    }
+
+    private String getSplitClassName() {
+        if (mClassName == null) {
+            return "";
+        }
+        System.out.println(mClassName);
+        return mClassName.replaceAll("\\.","/");
     }
 }

@@ -1,11 +1,14 @@
 package com.gzoom.gzoommethodprocessor;
 
 import com.google.auto.service.AutoService;
-import com.gzoom.commonlibrary.GZoomDataManager;
 import com.gzoom.commonlibrary.GZoomMethod;
 import com.gzoom.commonlibrary.GZoomMethodInfo;
+import com.gzoom.commonlibrary.file.FileResourceUtils;
 
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,8 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
 
 /**
  * Copyright (c) 2020 GongZaiChang. All rights reserved.
@@ -33,8 +38,8 @@ import javax.lang.model.util.Elements;
 public class GZoomHookMethodProcessor extends AbstractProcessor {
     Filer mFiler;
     Elements mElementUtils;
-//    private Map<String, AnnotatedClass> mAnnotatedClassMap;
-
+//    List<GZoomMethodInfo> mGZoomMethodList = new ArrayList<>();
+    Map<GZoomMethodInfo,GZoomMethodInfo> mReplaceMap = new HashMap<>();
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
@@ -52,14 +57,35 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-//        mAnnotatedClassMap.clear();
+        // 这里其实会调用两次
         System.out.println("start GZoomHookMethodProcessor");
         try {
-            processGZoomMethod(roundEnvironment);
+            if (roundEnvironment.processingOver()) {
+                writeDataToFile();
+            } else {
+                processGZoomMethod(roundEnvironment);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
+    }
+
+    private void writeDataToFile() {
+        Filer filer = processingEnv.getFiler();
+
+        try {
+            FileObject fileObject = filer.createResource(StandardLocation.CLASS_OUTPUT,
+                    "", FileResourceUtils.getMethodPath());
+            System.out.println("写到目录："+fileObject.toUri());
+            OutputStream out = fileObject.openOutputStream();
+            for (GZoomMethodInfo gZoomMethodInfo : mReplaceMap.keySet()) {
+                FileResourceUtils.writeMethod(gZoomMethodInfo, mReplaceMap.get(gZoomMethodInfo), out);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void processGZoomMethod(RoundEnvironment roundEnvironment) {
@@ -76,33 +102,23 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
             String methodName = executableElement.getSimpleName().toString();
             // 描述符
             String methodDesc = "";
-//            List<VariableElement> list = (List<VariableElement>) executableElement.getParameters();
-//            for (VariableElement variableElement : list) {
-//                methodDesc += variableElement.getSimpleName().toString() + ";";
-//            }
-//            methodDesc = "(" + methodDesc + ")";
+            List<VariableElement> list = (List<VariableElement>) executableElement.getParameters();
+            for (VariableElement variableElement : list) {
+                methodDesc += variableElement.getSimpleName().toString() + ";";
+            }
+            methodDesc = "(" + methodDesc + ")";
             // 最后要加一个返回类型
             methodDesc += executableElement.getReturnType().toString();
-            GZoomMethodInfo methodInfo = new GZoomMethodInfo(className, methodName, methodDesc);
-            GZoomDataManager.getInstance().addMethodInfo(methodInfo);
+            GZoomMethodInfo targetMethodInfo = new GZoomMethodInfo(className, methodName, methodDesc);
+
+            String sourceClassName = gZoomMethod.hookClass();
+
+            GZoomMethodInfo sourceMethodInfo = new GZoomMethodInfo(sourceClassName,methodName,methodDesc);
+            mReplaceMap.put(targetMethodInfo, sourceMethodInfo);
         }
     }
 
 
-//    /**获取注解所在文件对应的生成类*/
-//    private AnnotatedClass getAnnotatedClass(Element element) {
-//        //typeElement表示类或者接口元素
-//        TypeElement typeElement = (TypeElement) element.getEnclosingElement();
-//        String fullName = typeElement.getQualifiedName().toString();
-//        //这里其实就是变相获得了注解的类名
-//        AnnotatedClass annotatedClass = mAnnotatedClassMap.get(fullName);
-//        // Map<String, AnnotatedClass>
-//        if (annotatedClass == null) {
-//            annotatedClass = new AnnotatedClass(typeElement, mElementUtils);
-//            mAnnotatedClassMap.put(fullName, annotatedClass);
-//        }
-//        return annotatedClass;
-//    }
 
 
     @Override
