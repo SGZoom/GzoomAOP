@@ -37,7 +37,7 @@ public class GZoomMethodInfo {
 
     @Override
     public String toString() {
-        return getSplitClassName() + "." + mMethodName;
+        return getSplitClassName() + "." + mMethodName  + mMethodDesc;
     }
 
     private String getSplitClassName() {
