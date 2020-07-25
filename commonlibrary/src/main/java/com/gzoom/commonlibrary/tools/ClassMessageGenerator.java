@@ -1,6 +1,5 @@
 package com.gzoom.commonlibrary.tools;
 
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.lang.reflect.Method;
 
@@ -45,6 +44,7 @@ public class ClassMessageGenerator {
         return getPrimitiveLetter(parameterType);
     }
 
+    // Todo:获取数组类型的
     public static String getType(final String parameterType) {
         // 数组类型还没想好怎么处理 int[]
 //        if (parameterType.isArray()) {
@@ -128,4 +128,25 @@ public class ClassMessageGenerator {
         return "[]".equals(lastTwo);
     }
 
+    /**
+     * 将类名转换成类路径
+     * com.a.b -> com/a/b
+     */
+    public static String getClassPath(String className) {
+        if (className == null || className.length() <= 0) {
+            return null;
+        }
+        String[] paths = className.split("\\.");
+        String type = getType(className);
+        StringBuilder pathBuilder = new StringBuilder("");
+        for (String folder : paths) {
+            pathBuilder.append(folder);
+            pathBuilder.append("/");
+        }
+        String classPath = pathBuilder.toString();
+        if (classPath != null && classPath.length() > 1) {
+            classPath = classPath.substring(0, classPath.length() - 1);
+        }
+        return type + classPath;
+    }
 }

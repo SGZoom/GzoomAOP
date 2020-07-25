@@ -25,6 +25,8 @@ public class FileResourceUtils {
 
     public static void writeMethod(GZoomMethodInfo target, GZoomMethodInfo source, OutputStream outputStream)
             throws IOException {
+        System.out.println("开始写入临时文件");
+        // 先是预替代的方法，后是自己写的替代方法
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, UTF_8));
         writer.append(source.toString());
         writer.append("=");

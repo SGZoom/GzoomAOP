@@ -111,7 +111,7 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
             ClassLoader classLoader = gZoomMethod.getClass().getClassLoader();
 
             List<VariableElement> list = (List<VariableElement>) executableElement.getParameters();
-
+            // 这里尝试过直接拿Class Method来进行解析，但是classLoader不对
 //            Class methodClass = classLoader.loadClass(className);
 //            Method method = methodClass.getMethod(methodName, methodClass.getClass());
 //            methodDesc.append(ClassMessageGenerator.getDesc(method));
@@ -121,6 +121,7 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
             for (VariableElement variableElement : list) {
                 TypeMirror typeMirror = variableElement.asType();
                 System.out.println("开始拼接参数" + typeMirror.toString());
+                methodDesc.append(ClassMessageGenerator.getType(typeMirror.toString()));
 //                Class param = classLoader.loadClass(typeMirror.toString());
 //                methodDesc.append(ClassMessageGenerator.);
                 methodDesc.append(";");
