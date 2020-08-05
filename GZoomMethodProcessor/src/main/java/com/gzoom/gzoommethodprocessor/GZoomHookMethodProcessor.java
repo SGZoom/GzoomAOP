@@ -79,8 +79,12 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
         Filer filer = processingEnv.getFiler();
 
         try {
+            //StandardLocation.CLASS_OUTPUT：java文件生成class文件的位置，/app/build/intermediates/javac/debug/classes/目录下
+            //StandardLocation.SOURCE_OUTPUT：java文件的位置，一般在/ppjoke/app/build/generated/source/apt/目录下
+            //StandardLocation.CLASS_PATH 和 StandardLocation.SOURCE_PATH用的不多，指的了这个参数，就要指定生成文件的pkg包名了
             FileObject fileObject = filer.createResource(StandardLocation.CLASS_OUTPUT,
                     "", FileResourceUtils.getMethodPath());
+
             System.out.println("写到目录：" + fileObject.toUri());
             OutputStream out = fileObject.openOutputStream();
             for (GZoomMethodInfo gZoomMethodInfo : mReplaceMap.keySet()) {

@@ -12,7 +12,7 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethods;
  * @author GZoom
  * @date 2020-06-20 17:29
  */
-public class GZoomAopClassVisitor extends ClassVisitor {
+class GZoomAopClassVisitor extends ClassVisitor {
     private String mClassName;
 
     public GZoomAopClassVisitor(int i) {

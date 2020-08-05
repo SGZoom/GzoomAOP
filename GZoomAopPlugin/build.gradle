@@ -1,5 +1,9 @@
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
+//apply plugin:'com.android.library'
+apply plugin:'maven'
 apply plugin: 'groovy'
+
+
 repositories {
     maven {
         url '../repo'
@@ -12,22 +16,34 @@ dependencies {
     //groovy sdk
     implementation localGroovy()
     compileOnly 'com.android.tools.build:gradle:3.5.3'
-    compileOnly 'com.gzoom.commonlibrary:GZoomCommonLibrary:1.0.2'
+//    compileOnly 'com.gzoom.commonlibrary:GZoomCommonLibrary:1.0.2'
 }
 
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            version = project.PROJECT_VERSION
-            artifactId = project.PROJECT_ARTIFACTID
-            groupId = project.PROJECT_GROUP
-        }
-    }
+uploadArchives {
     repositories {
-        maven {
-            url "../repo"
+        mavenDeployer {
+            pom.groupId = project.PROJECT_GROUP
+            pom.artifactId = project.PROJECT_ARTIFACTID
+            pom.version = project.PROJECT_VERSION
+            pom.packaging = 'aar'
+            repository(url: uri("../repo"))
         }
     }
 }
+
+
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            version = project.PROJECT_VERSION
+//            artifactId = project.PROJECT_ARTIFACTID
+//            groupId = project.PROJECT_GROUP
+//        }
+//    }
+//    repositories {
+//        maven {
+//            url "../repo"
+//        }
+//    }
+//
+//}

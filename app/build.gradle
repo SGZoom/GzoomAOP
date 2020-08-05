@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'GZoomAopPlugin'
+
 android {
     compileSdkVersion 29
     defaultConfig {
@@ -26,5 +27,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation project(':commonlibrary')
     annotationProcessor project(':GZoomMethodProcessor')
-//    compileOnly 'com.gzoom.commonlibrary:GZoomCommonLibrary:1.0.2'
 }
