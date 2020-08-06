@@ -3,7 +3,7 @@ package com.gzoom.gzoomaop.hookers;
 /**
  * Copyright (c) 2020 Tencent. All rights reserved.
  *
- * @author liamjyxu
+ * @author GZoom
  * @date 2020-07-23 21:46
  */
 public class FakeHooker {

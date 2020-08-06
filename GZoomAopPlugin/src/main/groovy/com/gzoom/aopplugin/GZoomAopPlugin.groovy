@@ -15,7 +15,13 @@ class GZoomAopPlugin implements Plugin<Project>{
         AppExtension android = project.getExtensions().getByType(AppExtension.class)
 //        GZoomAopExtension extension = project.getExtensions().create(PLUGIN_NAME, GZoomAopExtension.class, project)
         String path =  project.getPath()
+        String buildPath =  project.getBuildDir().getAbsolutePath()
         System.out.println("GZoomAopPlugin 当前的路径："+path)
+        System.out.println("GZoomAopPlugin 当前的build路径："+buildPath)
+        buildPath += "/intermediates/javac/debug/classes/META-INF/GZoomAop-data"
+
+
+        GZoomDataManager.getInstance().generateData(buildPath)
         // 注册一个Transform
         android.registerTransform(new GZoomTransformation())
     }

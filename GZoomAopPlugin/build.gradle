@@ -16,7 +16,7 @@ dependencies {
     //groovy sdk
     implementation localGroovy()
     compileOnly 'com.android.tools.build:gradle:3.5.3'
-//    compileOnly 'com.gzoom.commonlibrary:GZoomCommonLibrary:1.0.2'
+    implementation 'com.gzoom.commonlibrary:GZoomCommonLibrary:1.0.2'
 }
 
 uploadArchives {

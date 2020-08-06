@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 /**
  * Copyright (c) 2020 Tencent. All rights reserved.
  *
- * @author liamjyxu
+ * @author GZoom
  * @date 2020-07-22 21:13
  */
 public class ClassMessageGenerator {
