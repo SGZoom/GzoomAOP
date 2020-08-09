@@ -21,7 +21,7 @@ import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
 
-class GZoomTransformation extends Transform{
+class GZoomTransformation extends Transform {
     private static final String NAME = "GZoomTransformation"
 
     /**
@@ -66,12 +66,12 @@ class GZoomTransformation extends Transform{
                 jarInput.getName(),
                 jarInput.getContentTypes(),
                 jarInput.getScopes(),
-                Format.JAR)
+                com.android.build.api.transform.Format.JAR)
         if (isIncremental) {
             if (status == Status.ADDED || status == Status.CHANGED) {
                 transformJarFile(jarInput.getFile(), dest)
             } else if (status == Status.REMOVED && dest.exists()) {
-                FileUtils.forceDelete(dest)
+                org.apache.commons.io.FileUtils.forceDelete(dest)
             }
         } else {
             transformJarFile(jarInput.getFile(), dest)
@@ -84,9 +84,9 @@ class GZoomTransformation extends Transform{
         }
         File dest = outputProvider.getContentLocation(directoryInput.getName(),
                 directoryInput.getContentTypes(), directoryInput.getScopes(),
-                Format.DIRECTORY)
+                com.android.build.api.transform.Format.DIRECTORY)
         try {
-            FileUtils.forceMkdir(dest)
+            org.apache.commons.io.FileUtils.forceMkdir(dest)
             String srcDirPath = directoryInput.getFile().getAbsolutePath()
             String destDirPath = dest.getAbsolutePath()
             if (isIncremental) {
@@ -96,13 +96,13 @@ class GZoomTransformation extends Transform{
                     File destFile = new File(destFilePath)
                     Status status = map.get(file)
                     if (status == Status.REMOVED) {
-                        FileUtils.forceDelete(destFile)
+                        org.apache.commons.io.FileUtils.forceDelete(destFile)
                     } else if (status == Status.ADDED || status == Status.CHANGED) {
                         if (file.isFile() || file.getPath().endsWith(".class")) {
                             // 我们的目标文件，需要修改
                             transformClassFile(file, destFile)
                         } else if (file.isFile()) {
-                            FileUtils.copyFile(file, destFile)
+                            org.apache.commons.io.FileUtils.copyFile(file, destFile)
                         }
                     }
                 }
@@ -129,7 +129,7 @@ class GZoomTransformation extends Transform{
         if (destFile.isFile() && file.getPath().endsWith(".class")) {
             transformClassFile(file, destFile)
         } else if (file.isFile()) {
-            FileUtils.copyFile(file, destFile)
+            org.apache.commons.io.FileUtils.copyFile(file, destFile)
         }
     }
 
@@ -137,7 +137,7 @@ class GZoomTransformation extends Transform{
         System.out.println("transform ClassFile classFile：$inputClassFile.getPath()  dest:" + destFile.getPath())
         mExecutor.execute( {
             mSemaphore.acquire()
-            FileUtils.touch(destFile)
+            org.apache.commons.io.FileUtils.touch(destFile)
             FileInputStream fis = new FileInputStream(inputClassFile)
             ClassReader classReader = new ClassReader(fis)
             ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
@@ -156,7 +156,7 @@ class GZoomTransformation extends Transform{
         System.out.println("transform Jar jarFile：" + jarFile.getPath() + "  desc:" + desc.getPath())
         mExecutor.execute({
             mSemaphore.acquire()
-            FileUtils.touch(desc)
+            org.apache.commons.io.FileUtils.touch(desc)
             JarFile jf = new JarFile(jarFile)
             Enumeration<JarEntry> je = jf.entries()
             JarOutputStream jos = new JarOutputStream(new FileOutputStream(desc))
