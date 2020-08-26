@@ -52,7 +52,7 @@ public class ClassMessageGenerator {
 //        }
         String type = getPrimitiveLetter(parameterType);
         if (type == null) {
-            return parameterType.replaceAll("\\.", "/");
+            return "L" + parameterType.replaceAll("\\.", "/") + ";";
         } else {
             return type;
         }
@@ -90,25 +90,25 @@ public class ClassMessageGenerator {
     }
 
     public static String getPrimitiveLetter(String className) {
-        if (Integer.class.getSimpleName().equals(className)) {
+        if ("int".equals(className)) {
             return "I";
         }
-        if (Void.class.getSimpleName().equals(className)) {
+        if ("void".equals(className)) {
             return "V";
         }
-        if (Boolean.class.getSimpleName().equals(className)) {
+        if ("boolean".equals(className)) {
             return "Z";
         }
-        if (Character.class.getSimpleName().equals(className)) {
+        if ("character".equals(className)) {
             return "C";
         }
-        if (Byte.class.getSimpleName().equals(className)) {
+        if ("byte".equals(className)) {
             return "B";
         }
-        if (Short.class.getSimpleName().equals(className)) {
+        if ("short".equals(className)) {
             return "S";
         }
-        if (Float.class.getSimpleName().equals(className)) {
+        if ("float".equals(className)) {
             return "F";
         }
         if (Long.class.getSimpleName().equals(className)) {

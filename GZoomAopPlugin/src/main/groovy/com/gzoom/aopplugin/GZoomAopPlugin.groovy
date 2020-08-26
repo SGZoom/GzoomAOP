@@ -24,5 +24,6 @@ class GZoomAopPlugin implements Plugin<Project>{
         GZoomDataManager.getInstance().generateData(buildPath)
         // 注册一个Transform
         android.registerTransform(new GZoomTransformation())
+//        android.registerTransform(new SimplifyAopTransform())
     }
 }

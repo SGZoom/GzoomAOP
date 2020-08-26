@@ -128,12 +128,11 @@ public class GZoomHookMethodProcessor extends AbstractProcessor {
                 methodDesc.append(ClassMessageGenerator.getType(typeMirror.toString()));
 //                Class param = classLoader.loadClass(typeMirror.toString());
 //                methodDesc.append(ClassMessageGenerator.);
-                methodDesc.append(";");
             }
             methodDesc.append(")");
             String methodString = methodDesc.toString();
             // 最后要加一个返回类型
-//            methodDesc += executableElement.getReturnType().toString();
+            methodString += ClassMessageGenerator.getType(executableElement.getReturnType().toString());
             GZoomMethodInfo targetMethodInfo = new GZoomMethodInfo(className, methodName, methodString);
 
             String sourceClassName = gZoomMethod.hookClass();

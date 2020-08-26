@@ -1,5 +1,7 @@
 package com.gzoom.gzoomaop.hookers;
 
+import com.gzoom.commonlibrary.GZoomMethod;
+
 /**
  * Copyright (c) 2020 Tencent. All rights reserved.
  *
@@ -8,11 +10,10 @@ package com.gzoom.gzoomaop.hookers;
  */
 public class FakeHooker {
 
-    public int getResult(int[] datas) {
+    @GZoomMethod(hookClass = "com/gzoom/gzoomaop/Caculater")
+    public static int getResult(int a, int b) {
         int result = 0;
-        for(int data : datas) {
-            result += data;
-        }
+        result = a * b;
         return result;
     }
 }
