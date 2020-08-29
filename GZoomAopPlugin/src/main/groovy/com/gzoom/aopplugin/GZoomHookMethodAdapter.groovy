@@ -39,7 +39,6 @@ class GZoomHookMethodAdapter extends AdviceAdapter {
             if (sourceMethod != null && targetMethod != null) {
                 //开始hook构造函数 需要New指令
                 isNeedRemoveDUP = true
-                println("Aop修改 Class:$mCurClassName 重定向构造函数 MatchEntry:$hookConstructorEntry")
                 //压栈
                 mConstructorMethodStack.push(new ConstructorMethod(type, true))
             } else {
@@ -97,28 +96,29 @@ class GZoomHookMethodAdapter extends AdviceAdapter {
         println("修改方法：$owner , $name , $desc")
         GZoomMethodInfo sourceMethod
         GZoomMethodInfo targetMethod
+        Entry matchEntry
+        SimplifyAopExtension.mEntryList?.forEach {
+            entry ->
+                println("开始遍历配置表: ${entry.sourceMethod.className} , ${entry.replaceMethod.className} , ${entry.replaceMethod.methodDesc}")
+                boolean isMatch = owner == entry.replaceMethod.className &&
+                        mCurClassName != entry.sourceMethod.className &&
+                        name == entry.sourceMethod.methodName &&
+                        desc == entry.sourceMethod.methodDesc
 
-        GZoomDataManager.instance.getData()?.forEach {
-            key, value ->
-                isMatch = owner == key.targetClassName &&
-                        mCurClassName != value.targetClassName &&
-                        name == key.targetMethodName &&
-                        desc == key.targetMethodDesc
 
                 if (isMatch) {
                     //命中目标
-                    sourceMethod = key
-                    targetMethod = value
+                    matchEntry = entry
                     return
                 }
         }
 
-        if (sourceMethod != null && targetMethod != null) {
+        if (matchEntry != null) {
             println("Aop修改 Class:$mCurClassName 重定向method:${matchEntry.sourceMethod}")
             super.visitMethodInsn(Opcodes.INVOKESTATIC,
-                    targetMethod.targetClassName,
-                    targetMethod.targetMethodName,
-                    targetMethod.targetMethodDesc, false)
+                    matchEntry.sourceMethod.className,
+                    matchEntry.sourceMethod.methodName,
+                    matchEntry.sourceMethod.methodDesc, false)
         } else {
             super.visitMethodInsn(opcode, owner, name, desc, itf)
         }

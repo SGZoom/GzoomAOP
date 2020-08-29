@@ -45,7 +45,7 @@ class GZoomTransformation extends Transform {
     @Override
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         super.transform(transformInvocation)
-        System.out.println("gzoom - start prepare")
+        println('gzoom - start prepare')
         TransformOutputProvider outputProvider = transformInvocation.getOutputProvider()
         // 需要区分增量，输入不同
         boolean isIncremental = transformInvocation.isIncremental()
@@ -68,19 +68,6 @@ class GZoomTransformation extends Transform {
 
 
         mExecutor.waitForAllTasks()
-//        Collection<TransformInput> inputCollections = transformInvocation.getInputs()
-//        for (TransformInput input : inputCollections) {
-//            Collection<DirectoryInput> directories = input.getDirectoryInputs()
-//            for (DirectoryInput directoryInput : directories) {
-//                System.out.println("gzoom - start prepare:" + directoryInput.getName())
-//                handleDirectories(outputProvider, directoryInput, isIncremental)
-//            }
-//            Collection<JarInput> jars = input.getJarInputs()
-//            for (JarInput jarInput : jars) {
-//                System.out.println("gzoom - start prepare:" + jarInput.getName())
-//                handleJarInputs(outputProvider, jarInput, isIncremental)
-//            }
-//        }
     }
 
     private void handleJarInputs(TransformOutputProvider outputProvider, JarInput jarInput, boolean isIncremental) throws IOException {
@@ -114,7 +101,7 @@ class GZoomTransformation extends Transform {
             String destDirPath = dest.getPath()
             if (isIncremental) {
                 directoryInput.changedFiles.each {
-                    file,state->
+                    file, state ->
                         String destFilePath = file.getPath().replace(srcDirPath, destDirPath)
                         File destFile = new File(destFilePath)
                         switch (status) {
@@ -162,7 +149,7 @@ class GZoomTransformation extends Transform {
     }
 
     private void transformClassFile(File inputClassFile, File destFile) {
-        System.out.println("transform ClassFile classFile：$inputClassFile.path  dest: $destFile.path")
+        println("transform ClassFile classFile：$inputClassFile.path  dest: $destFile.path")
         mExecutor.execute({
             mSemaphore.acquire()
             FileUtils.touch(destFile)
@@ -181,7 +168,7 @@ class GZoomTransformation extends Transform {
     }
 
     private void transformJarFile(File jarFile, File desc) {
-        System.out.println("transform Jar jarFile：" + jarFile.getPath() + "  desc:" + desc.getPath())
+        println("transform Jar jarFile：" + jarFile.getPath() + "  desc:" + desc.getPath())
         mExecutor.execute(
                 {
                     mSemaphore.acquire()
@@ -197,8 +184,7 @@ class GZoomTransformation extends Transform {
                         if (jarEntry.getName().endsWith(".class")) {
                             org.objectweb.asm.ClassReader classReader = new org.objectweb.asm.ClassReader(classBytes)
                             org.objectweb.asm.ClassWriter classWriter = new org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
-                            ClassVisitor cv = new SimplifyAopClassVisitor(org.objectweb.asm.Opcodes.ASM5, classWriter)
-//                            ClassVisitor cv = new GZoomAopClassVisitor(Opcodes.ASM5, classWriter)
+                            ClassVisitor cv = new GZoomAopClassVisitor(org.objectweb.asm.Opcodes.ASM5, classWriter)
                             classReader.accept(cv, org.objectweb.asm.ClassReader.EXPAND_FRAMES)
                             classBytes = classWriter.toByteArray()
                         }

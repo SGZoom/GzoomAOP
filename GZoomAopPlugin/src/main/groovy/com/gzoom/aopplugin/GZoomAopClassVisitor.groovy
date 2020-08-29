@@ -31,10 +31,10 @@ class GZoomAopClassVisitor extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        System.out.println("访问：" + mClassName + ",name=" + name + ",desc" + desc)
+        println("访问：" + mClassName + ",name=" + name + ",desc" + desc)
         MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions)
         GZoomHookMethodAdapter adapter = new GZoomHookMethodAdapter(Opcodes.ASM5, methodVisitor, access, name, desc)
-        adapter.mCurClassName = mCurClassName
+        adapter.mCurClassName = mClassName
         return methodVisitor
     }
 }
